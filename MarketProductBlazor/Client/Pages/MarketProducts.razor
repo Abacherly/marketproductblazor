@@ -1,0 +1,51 @@
+﻿@page "/marketproducts"
+
+@inject IMarketProductService MarketProductService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Produtos</PageTitle>
+
+<h3>Produtos</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Oferta</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in MarketProductService.Products)
+        {
+            <tr>
+                <td>@product.Name</td>
+                <td>@product.Description</td>
+                <td>@product.Offer.Name</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="(() => ShowProduct(product.Id))"><i class="oi oi-pencil"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<button class="btn btn-primary" @onclick="CreateNewProduct">Criar novo produto</button>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await MarketProductService.GetMarketProducts();
+    }
+
+    void ShowProduct (int id)
+    {
+        NavigationManager.NavigateTo($"product/{id}");
+    }
+
+    void CreateNewProduct()
+    {
+        NavigationManager.NavigateTo("/product");
+    }
+
+}
